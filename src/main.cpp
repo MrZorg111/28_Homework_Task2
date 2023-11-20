@@ -8,20 +8,22 @@ std::mutex station;
 
 void railway_station(char name_train, int travel_time) {
 	std::string depart;
-	std::cout << "Поезд " << name_train << " в пути!" << std::endl;
+	std::cout << "Train " << name_train << " on the way!" << std::endl;
 	std::this_thread::sleep_for(std::chrono::seconds(travel_time));
 	station.lock();
-	std::cout << "Поезд " << name_train << " прибыл на вокзал и производит выгрузку и посадку пассажиров!" << std::endl;
+	std::cout << "Train " << name_train << " arrived at the station and performs unloading and boarding of passengers!" << std::endl;
 	std::this_thread::sleep_for(std::chrono::seconds(3));
-	std::cout << "Посадка завершена, отдайте команду на отправление: (depart)" << std::endl;
-	std::cin >> depart;
+	std::cout << "Boarding is completed, give the command to depart: (depart)" << std::endl;
+	while (depart != "depart") {
+		std::cin >> depart;
+	}
+	std::cout << "The train is leaving!" << std::endl;
 	station.unlock();
 }
 
 int main() {
-	setlocale(LC_ALL, "rus");
 	int time1, time2, time3;
-	std::cout << "Введите время в пути для каждого поезда через пробел!" << std::endl;
+	std::cout << "Enter the travel time for each train separated by a space!" << std::endl;
 	std::cin >> time1 >> time2 >> time3;
 
 	std::thread train1(railway_station, 'A', time1);
